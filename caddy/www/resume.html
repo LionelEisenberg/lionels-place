@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lionel Eisenberg — Resume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #171717;
+    --ink-soft: #4a4a4a;
+    --accent: #1a56a0;
+    --rule: #d9d9d9;
+    --rule-dark: #999999;
+    --bg: #fdfdfc;
+    --serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+    font-size: 17px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 44px 32px 80px; }
+
+  header.masthead { text-align: center; margin-bottom: 10px; }
+  header.masthead h1 {
+    font-size: 40px;
+    margin: 0 0 4px 0;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  header.masthead .contact {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin: 0 0 10px 0;
+  }
+  header.masthead .contact a { color: var(--ink-soft); }
+  header.masthead .tagline {
+    font-style: italic;
+    font-size: 16.5px;
+    max-width: 700px;
+    margin: 0 auto;
+    color: var(--ink);
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin: 18px 0 30px;
+    z-index: 10;
+    text-align: center;
+    font-size: 16px;
+  }
+  nav.toc a {
+    color: var(--accent);
+    text-decoration: none;
+    margin: 0 14px;
+  }
+  nav.toc a:hover { text-decoration: underline; }
+
+  section { margin-bottom: 36px; }
+  section > h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--rule-dark);
+  }
+  .entries { padding-left: 14px; }
+
+  .entry { margin-top: 18px; }
+  .entry-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0 12px;
+  }
+  .entry-head .org {
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .entry-head .where { font-size: 18px; font-weight: 700; }
+  .entry-sub {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0 12px;
+    margin-bottom: 4px;
+  }
+  .entry-sub .role { font-size: 18px; }
+  .entry-sub .role .team { font-size: 15px; color: var(--ink-soft); }
+  .entry-sub .when { font-style: italic; font-size: 17px; }
+  .entry-head .links {
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .entry-head .links a { color: var(--accent); text-decoration: none; }
+  .entry-head .links a:hover { text-decoration: underline; }
+  .entry-head .label { font-size: 16px; font-weight: 700; white-space: nowrap; }
+
+  ul.bullets { margin: 4px 0 0 0; padding-left: 22px; }
+  ul.bullets li { margin-bottom: 6px; }
+  ul.bullets li b { font-weight: 700; }
+  .metric {
+    display: block;
+    font-style: italic;
+    color: var(--ink-soft);
+    margin: 2px 0 0 18px;
+  }
+  .metric::before { content: "◦ "; }
+  .fig { text-decoration: underline; text-underline-offset: 2px; }
+  .stack { font-style: normal; color: var(--ink-soft); font-size: 15.5px; }
+
+  .degree {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0 12px;
+    margin: 6px 0 0 18px;
+  }
+  .degree .what b { font-weight: 700; }
+  .degree .year { font-style: italic; }
+
+  dl.skills { margin: 10px 0 0 18px; }
+  dl.skills div { margin-bottom: 6px; }
+  dl.skills dt { display: inline; font-weight: 700; }
+  dl.skills dd { display: inline; margin: 0; }
+
+  footer {
+    margin-top: 40px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .wrap { padding: 28px 18px 60px; }
+    header.masthead h1 { font-size: 32px; }
+    nav.toc a { margin: 0 8px; }
+    .entry-head, .entry-sub, .degree { flex-direction: column; }
+    .entries { padding-left: 4px; }
+  }
+
+  @media print {
+    nav.toc, footer { display: none; }
+    body { background: #ffffff; font-size: 11pt; }
+    .wrap { padding: 0; max-width: none; }
+    a { color: var(--ink); text-decoration: none; }
+    section { margin-bottom: 18px; }
+    .entry { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <h1>Lionel Eisenberg</h1>
+  <p class="contact">
+    San Francisco, CA, 94107 &nbsp;•&nbsp; <a href="mailto:lionel.eisenberg@gmail.com">lionel.eisenberg@gmail.com</a>
+    &nbsp;•&nbsp; <a href="https://github.com/LionelEisenberg">github.com/LionelEisenberg</a>
+    &nbsp;•&nbsp; <a href="https://www.linkedin.com/in/lionel-eisenberg-90b334115/">LinkedIn</a>
+    &nbsp;•&nbsp; Green Card Holder
+  </p>
+  <p class="tagline">Engineer who treats infrastructure as a product: built data pipelines and
+  ranking systems behind Google Search and a 1M-page publishing platform at Yext, owning
+  outcomes — not just uptime. Outside work: a self-hosted home &amp; fitness tracking platform,
+  LLM tooling, a game in progress — mostly excuses to learn something new.</p>
+</header>
+
+<nav class="toc">
+  <a href="#experience">Experience</a>
+  <a href="#projects">Projects</a>
+  <a href="#education">Education</a>
+  <a href="#skills">Skills</a>
+</nav>
+
+<section id="experience">
+  <h2>Professional Experience</h2>
+  <div class="entries">
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="org">Google</span>
+      <span class="where">San Francisco, CA</span>
+    </div>
+    <div class="entry-sub">
+      <span class="role">Software Engineer <span class="team">— Search Team / Merchant Content &amp; Discovery Team</span></span>
+      <span class="when">06/2022 – 05/2025</span>
+    </div>
+    <ul class="bullets">
+      <li><b>Developed a Merchant Targeting Engine API</b> to provide Google surfaces (Search,
+        Gmail, Ads) with real-time access to comprehensive merchant information (type, attributes,
+        categories). Leveraged high-availability storage and MapReduce pipelines to process data
+        from across Google into structured summaries served to search and consumer surfaces.
+        <span class="metric">Led to an increased successful onboarding rate for merchants of
+        <span class="fig">22% over 2 years</span>.</span></li>
+      <li><b>Built a service for direct merchant data synchronization</b> between Google Shopping
+        and 3rd-party ecommerce platforms (Shopify, WooCommerce). Developed a modular scraping
+        agent to identify and categorize ecommerce stores, and an API initiating secure 3P and
+        Google OAuth flows for seamless authentication and data sync.
+        <span class="metric">Increased successful onboarding rate of 3P Merchants
+        <span class="fig">from 12% to 44%</span>.</span></li>
+      <li><b>Revamped the &ldquo;hidden gem&rdquo; ranking component within Google Search</b>,
+        integrating new signals to surface high-quality, lesser-known merchants for shopping
+        queries; the quality module was redesigned and retrained in collaboration with Search
+        stakeholders.
+        <span class="metric">Contributed to <span class="fig">46% of a top-level Google OKR</span>
+        by diversifying search results.</span></li>
+      <li><b>Spearheaded &ldquo;New Arrivals&rdquo;, a product detection system,</b> tagging
+        products sold on Google as New Arrival, Trending, or Promotion with no merchant action.
+        Daily rolling MapReduce pipelines and fuzzy matching over SKUs, categories, and attributes
+        decide when two listings are the same product.
+        <span class="metric">Led end to end, from spotting the unused product data to launch;
+        increased new-product discovery by <span class="fig">18%</span>.</span></li>
+      <li><b>Served as a Java Readability Mentor</b>: conducted code reviews, interviewed
+        prospective candidates, ran monthly team retrospectives, and mentored interns and junior
+        engineers.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="org">Yext</span>
+      <span class="where">Washington DC</span>
+    </div>
+    <div class="entry-sub">
+      <span class="role">Software Engineer</span>
+      <span class="when">06/2020 – 06/2022</span>
+    </div>
+    <ul class="bullets">
+      <li><b>Built a high-throughput static asset generation and publishing system</b> capable of
+        publishing 1M pages in under 20 minutes, each accessible in &lt;30ms from CDNs
+        globally.</li>
+      <li><b>Led the creation of a CLI tool</b> harnessing the page generation logic, empowering
+        developers to build, serve, and render pages locally given mock data sources.</li>
+      <li><b>Architected a Nomad GroupeCache</b> between Redis and Nomad clusters —
+        <i>increased cache hit rate by <span class="fig">135%</span> and lowered average request
+        time by <span class="fig">&gt;40%</span>.</i></li>
+      <li><b>Served on the monthly on-call rotation</b> ensuring 99.99% uptime, responding to
+        client requests and PagerDuty; designed and implemented technical interviews and
+        system-design challenges for prospective applicants.</li>
+      <li class="stack"><b>Tech Stack:</b> GoLang, AWS S3, GCS, Kafka, MirrorMaker, Kubernetes,
+        MySQL, Redis, Route53, Nomad</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="org">ForagerOne</span>
+      <span class="where">Baltimore, MD</span>
+    </div>
+    <div class="entry-sub">
+      <span class="role">Software Engineer <span class="team">— <a href="https://www.foragerone.com">www.foragerone.com</a></span></span>
+      <span class="when">09/2017 – 05/2019</span>
+    </div>
+    <ul class="bullets">
+      <li><b>Managed a team of 10 engineers</b> building a full-stack platform that helps students
+        discover faculty-affiliated research opportunities. Shipped messaging, profile UIs, and
+        backend features, reduced technical debt, resolved critical failures in real time, and
+        mentored junior engineers in incident response.</li>
+      <li class="stack"><b>Tech Stack:</b> Angular, NodeJS, MySQL, Firebase, Elasticsearch,
+        Express</li>
+    </ul>
+  </div>
+
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  <div class="entries">
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="org">lionel.place</span>
+      <span class="links"><a href="https://lionel.place">lionel.place</a> —
+        <a href="https://github.com/LionelEisenberg/Pirateship">github.com/LionelEisenberg/Pirateship</a></span>
+      <span class="label">Personal Project</span>
+    </div>
+    <ul class="bullets">
+      <li><b>Built &ldquo;Helm&rdquo;, an AI-driven health &amp; fitness tracking app, to product
+        standard</b> (FastAPI, React/TypeScript, ~33k LOC, 600+ tests gated by pre-commit). Logs
+        meals, workouts, sleep, and habits from free-form text or food photos via LLM parsing,
+        tracks progressive overload across workouts, and syncs Google Health data including sleep
+        stages and intraday heart rate. Built as a consumer product; used daily by me, friends,
+        and family.</li>
+      <li><b>Built an asynchronous LLM pipeline</b>: a durable job queue consumed by a dedicated
+        worker container (leases, retries, idempotency keys), with per-task model waterfalls
+        across Claude (Agent SDK) and Gemini, quota tracking, and automatic failover to
+        self-hosted Ollama models on a local GPU when both cloud providers fail. Every job records
+        token, cost, latency, and confidence telemetry, and clients reconnect to in-flight jobs
+        after a page refresh.</li>
+      <li><b>Self-host and operate a 17-service Docker stack</b>: media streaming and requests,
+        GPU-accelerated photo library with ML search, password manager, and a blog with email
+        subscriptions, fronted by Caddy (automatic HTTPS, HTTP/3) with Cloudflare dynamic DNS and
+        Jellyfin-backed JWT auth with role-based access.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="org">DenyTillYouDie</span>
+      <span class="links"><a href="https://github.com/LionelEisenberg/DenyTillYouDie">github.com/LionelEisenberg/DenyTillYouDie</a></span>
+      <span class="label">Kearny Game Jam 2025</span>
+    </div>
+    <ul class="bullets">
+      <li><b>Satirical dark-humor healthcare simulator</b>: you play a claims assessor forced to
+        choose between approving life-saving care and hitting the quotas that keep you paid,
+        employed, and able to feed your family.</li>
+      <li><b>Designed, built, and shipped solo within the jam window</b>: all gameplay systems,
+        UI, and balancing in GDScript; all pixel art drawn in Aseprite.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="org">EndlessPath</span>
+      <span class="links"><a href="https://github.com/LionelEisenberg/EndlessPath">github.com/LionelEisenberg/EndlessPath</a></span>
+      <span class="label">Big Mode Game Jam 2026</span>
+    </div>
+    <ul class="bullets">
+      <li><b>Incremental idle RPG with active mini-games</b> set in a world of Wuxia myth — you
+        slowly cultivate a martial artist's power.</li>
+      <li><b>In development since late 2025</b>, the bigger of the two games: idle and progression
+        systems, mini-games, custom GDShader effects, and all art in Aseprite.</li>
+    </ul>
+  </div>
+
+  </div>
+</section>
+
+<section id="education">
+  <h2>Education and Diplomas</h2>
+  <div class="entries">
+  <div class="entry">
+    <div class="entry-head">
+      <span class="org">Johns Hopkins University</span>
+      <span class="where">Baltimore, MD</span>
+    </div>
+    <div class="entry-sub">
+      <span class="role">Graduated with honors, Cumulative GPA: 3.85</span>
+    </div>
+    <div class="degree">
+      <span class="what"><b>Master of Science and Engineering (M.S.E)</b> in Computer Science,
+        focus in Cryptography</span>
+      <span class="year">06/2020</span>
+    </div>
+    <div class="degree">
+      <span class="what"><b>Bachelor of Science (B.S)</b> in Computer Science, Minor in Applied
+        Mathematics &amp; Statistics</span>
+      <span class="year">06/2019</span>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="skills">
+  <h2>Skills</h2>
+  <dl class="skills">
+    <div><dt>Programming Languages:</dt> <dd>Java, GoLang, TypeScript, Python, SQL, GDScript,
+      GDShader, Dart, C++</dd></div>
+    <div><dt>Backend &amp; Infrastructure:</dt> <dd>FastAPI, SQLAlchemy, AWS (S3, Route53, SQS,
+      Lambda), Kafka, Nomad, Kubernetes, Docker, Redis, MySQL</dd></div>
+    <div><dt>LLM Systems:</dt> <dd>Claude Agent SDK, Anthropic &amp; Gemini APIs, multi-provider
+      routing &amp; failover, structured outputs, async job queues, LLM observability
+      (token/cost/latency telemetry)</dd></div>
+    <div><dt>Machine Learning &amp; Data Science:</dt> <dd>TensorFlow, Ranklab, Anima,
+      Objective-Based Tuning</dd></div>
+    <div><dt>Game Development:</dt> <dd>Godot (GDScript), C++, OpenGL, shader programming
+      (GDShader), Aseprite pixel art, 2D game &amp; systems design</dd></div>
+    <div><dt>Languages:</dt> <dd>Native French &amp; English; operational Mandarin &amp;
+      Spanish</dd></div>
+  </dl>
+</section>
+
+<footer>
+  Lionel Eisenberg — <a href="mailto:lionel.eisenberg@gmail.com">lionel.eisenberg@gmail.com</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "read",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "read.lionel.place — editorial blog build",
+  "scripts": {
+    "build": "node bin/build.mjs",
+    "test": "node --test test/**/*.mjs"
+  },
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

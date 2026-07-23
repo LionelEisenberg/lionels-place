@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIONEL.PLACE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --surface: #000000;
+    --text: #FFFFFF;
+    --text-muted: rgba(255, 255, 255, 0.58);
+    --text-subtle: rgba(255, 255, 255, 0.32);
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.22);
+    --success: #16A34A;
+    --s-1: 8px; --s-2: 16px; --s-3: 24px; --s-4: 32px;
+    --s-5: 40px; --s-6: 48px; --s-7: 56px; --s-8: 64px;
+    --s-10: 80px; --s-12: 96px; --s-16: 128px; --s-20: 160px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: 'Oswald', system-ui, -apple-system, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  /* Subtle grain overlay for luxury texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,0.012) 2px 3px),
+      radial-gradient(circle at 20% 10%, rgba(255,255,255,0.025), transparent 60%);
+    z-index: 1;
+  }
+  /* ===== Header ===== */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: var(--s-3) var(--s-5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .brand span { color: var(--text-subtle); }
+  .status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: var(--s-1);
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--success);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ===== Main ===== */
+  main {
+    flex: 1;
+    padding: var(--s-10) var(--s-5) var(--s-10);
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    margin-bottom: var(--s-6);
+    max-width: 1200px;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin-bottom: var(--s-3);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1px;
+    background: var(--text-subtle);
+    margin-right: var(--s-1);
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(4rem, 14vw, 12rem);
+    line-height: 0.88;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+  }
+  .hero h1 .slash {
+    color: var(--text-subtle);
+    font-weight: 200;
+  }
+  .hero .subtitle {
+    margin-top: var(--s-5);
+    font-size: clamp(16px, 1.6vw, 19px);
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    color: var(--text-muted);
+    max-width: 640px;
+  }
+  .hero .prompt {
+    margin-top: var(--s-8);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .hero .prompt::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--text-subtle);
+  }
+
+  /* ===== Services ===== */
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .service {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--s-5) var(--s-4);
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.25s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+    min-height: 240px;
+    position: relative;
+    overflow: hidden;
+  }
+  .service::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.02) 100%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .service:hover, .service:focus-visible {
+    background: rgba(255, 255, 255, 0.03);
+    outline: none;
+  }
+  .service:hover::after, .service:focus-visible::after { opacity: 1; }
+  .service:focus-visible {
+    outline: 1px solid var(--text);
+    outline-offset: -1px;
+  }
+  .service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+  .service-number { font-weight: 500; }
+  .service-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: clamp(40px, 4.5vw, 56px);
+    letter-spacing: -0.025em;
+    line-height: 0.95;
+    text-transform: uppercase;
+    margin-top: var(--s-3);
+  }
+  .service-description {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.015em;
+    line-height: 1.55;
+    margin-top: var(--s-2);
+    max-width: 320px;
+  }
+  .service-url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-subtle);
+    letter-spacing: 0.06em;
+    margin-top: var(--s-4);
+    padding-top: var(--s-2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s ease;
+  }
+  .service-url .arrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.3, 1);
+    color: var(--text-muted);
+  }
+  .service:hover .service-url { color: var(--text-muted); }
+  .service:hover .service-url .arrow {
+    transform: translateX(6px);
+    color: var(--text);
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    padding: var(--s-5);
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-subtle);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+  footer .flag { font-size: 16px; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    header { padding: var(--s-2) var(--s-3); }
+    .status span.label { display: none; }
+    main { padding: var(--s-16) var(--s-3) var(--s-8); }
+    .hero { margin-bottom: var(--s-10); }
+    .services { grid-template-columns: 1fr; }
+    footer { padding: var(--s-3); flex-direction: column; gap: var(--s-2); align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand"><span>/</span> LIONEL.PLACE</div>
+    <div class="status"><span class="status-dot"></span><span class="label">Online</span></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="prompt">Select a Destination</div>
+    </section>
+
+    <section class="services" aria-label="Services">
+      <a class="service" href="https://stream.lionel.place">
+        <div>
+          <div class="service-header">
+            <span class="service-number">01</span>
+            <span>Media</span>
+          </div>
+          <h2 class="service-name">Stream</h2>
+          <p class="service-description">Movies, TV, and music on Jellyfin.</p>
+        </div>
+        <div class="service-url">
+          <span>stream.lionel.place</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="service" href="https://requests.lionel.place">
+        <div>
+          <div class="service-header">
+            <span class="service-number">02</span>
+            <span>Library</span>
+          </div>
+          <h2 class="service-name">Requests</h2>
+          <p class="service-description">Ask for a movie or show and it gets added to the library.</p>
+        </div>
+        <div class="service-url">
+          <span>requests.lionel.place</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="service" href="https://recipes.lionel.place">
+        <div>
+          <div class="service-header">
+            <span class="service-number">03</span>
+            <span>Kitchen</span>
+          </div>
+          <h2 class="service-name">Recipes</h2>
+          <p class="service-description">Recipes I cook a lot. No login needed.</p>
+        </div>
+        <div class="service-url">
+          <span>recipes.lionel.place</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="service" href="https://helm.lionel.place">
+        <div>
+          <div class="service-header">
+            <span class="service-number">04</span>
+            <span>Private</span>
+          </div>
+          <h2 class="service-name">Helm</h2>
+          <p class="service-description">Where I track meals, workouts, and everything else. Login only.</p>
+        </div>
+        <div class="service-url">
+          <span>helm.lionel.place</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="service" href="https://immich.lionel.place">
+        <div>
+          <div class="service-header">
+            <span class="service-number">05</span>
+            <span>Memory</span>
+          </div>
+          <h2 class="service-name">Photos</h2>
+          <p class="service-description">Photo backup and search, running on Immich.</p>
+        </div>
+        <div class="service-url">
+          <span>immich.lionel.place</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="service" href="https://vault.lionel.place">
+        <div>
+          <div class="service-header">
+            <span class="service-number">06</span>
+            <span>Keys</span>
+          </div>
+          <h2 class="service-name">Vault</h2>
+          <p class="service-description">Self-hosted Bitwarden. Passwords for the household.</p>
+        </div>
+        <div class="service-url">
+          <span>vault.lionel.place</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="service" href="https://read.lionel.place">
+        <div>
+          <div class="service-header">
+            <span class="service-number">07</span>
+            <span>Words</span>
+          </div>
+          <h2 class="service-name">Read</h2>
+          <p class="service-description">Things I write. Some sections need a password.</p>
+        </div>
+        <div class="service-url">
+          <span>read.lionel.place</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="service" href="https://resume.lionel.place">
+        <div>
+          <div class="service-header">
+            <span class="service-number">08</span>
+            <span>Career</span>
+          </div>
+          <h2 class="service-name">Resume</h2>
+          <p class="service-description">My resume, if you're wondering what I do for work.</p>
+        </div>
+        <div class="service-url">
+          <span>resume.lionel.place</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <span>Self-Hosted · Cloudflare-Fronted</span>
+    <span class="flag">🏴‍☠️</span>
+  </footer>
+</body>
+</html>

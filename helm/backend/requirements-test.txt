@@ -1,0 +1,5 @@
+# Test-only dependencies. Installed into the image so the pre-commit hook
+# (and `docker compose exec helm python -m pytest`) can run the backend
+# suite inside the container — see helm/Dockerfile.
+pytest>=8.2
+pytest-asyncio>=0.24

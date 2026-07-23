@@ -1,0 +1,14 @@
+{
+  "name": "Helm",
+  "short_name": "Helm",
+  "description": "Personal health & fitness tracker",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0d0b0a",
+  "background_color": "#0d0b0a",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

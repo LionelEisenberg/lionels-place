@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>read</title>
+  <meta name="description" content="notes from lionel">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="site-title">read</h1>
+    <p class="site-tagline">notes from lionel</p>
+  </header>
+
+  <main class="post-list">
+    <article class="post-entry">
+      <time datetime="2026-07-02">July 2, 2026</time>
+      <h2><a href="/150-days">150 days</a></h2>
+      <p class="summary">150 days into a body recomposition, with the receipts.</p>
+    </article>
+    <article class="post-entry">
+      <time datetime="2026-05-17">May 17, 2026</time>
+      <h2><a href="/100-days">100-ish days</a></h2>
+      <p class="summary">100 days into a body recomposition, with the receipts.</p>
+    </article>
+    <article class="post-entry">
+      <time datetime="2026-05-10">May 10, 2026</time>
+      <h2><a href="/welcome-to-read">Welcome to read</a></h2>
+      <p class="summary">A small place to put thoughts that don't have a home elsewhere.</p>
+    </article>
+  </main>
+
+  <section class="subscribe">
+    <h2 class="subscribe-heading">Get notified of new posts</h2>
+    <p class="subscribe-blurb">Drop your email and I'll send a link when something new goes up. No other emails, ever.</p>
+    <form class="subscribe-form" id="subscribe-form" novalidate>
+      <input type="email" name="email" required placeholder="you@example.com"
+             class="subscribe-input" autocomplete="email" aria-label="Email address">
+      <input type="text" name="hp" tabindex="-1" autocomplete="off"
+             aria-hidden="true" class="subscribe-hp">
+      <button type="submit" class="subscribe-button">Subscribe</button>
+    </form>
+    <p class="subscribe-status" id="subscribe-status" hidden></p>
+  </section>
+
+  <script>
+    (function () {
+      var form = document.getElementById('subscribe-form');
+      var status = document.getElementById('subscribe-status');
+      if (!form || !status) return;
+
+      function show(msg, isError) {
+        status.textContent = msg;
+        status.classList.toggle('is-error', !!isError);
+        status.hidden = false;
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var data = new FormData(form);
+        var body = JSON.stringify({
+          email: (data.get('email') || '').toString(),
+          hp: (data.get('hp') || '').toString()
+        });
+
+        status.hidden = true;
+        status.classList.remove('is-error');
+
+        fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: body
+        })
+        .then(function (res) {
+          if (res.status === 400) {
+            show('That email looks off — try again?', true);
+            return;
+          }
+          return res.json().then(function (json) {
+            if (json && json.ok) {
+              form.hidden = true;
+              show('✓ Subscribed — talk soon.', false);
+            } else {
+              show('Something went wrong. Try again in a moment.', true);
+            }
+          });
+        })
+        .catch(function () {
+          show("Hmm, that didn't work. Try again in a moment.", true);
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

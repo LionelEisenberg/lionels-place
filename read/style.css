@@ -1,0 +1,383 @@
+/* ============================================================
+ * read.lionel.place — Editorial style guide
+ * ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #f4ede0;
+  --text: #2a1f15;
+  --text-muted: #5a4a3a;
+  --meta: #8a7560;
+  --accent: #8a5a2a;
+  --accent-soft: #b88a5a;
+  --code-bg: #ede4d2;
+  --rule: #d8c8a8;
+  --error: #9a3a1a;
+
+  --content-width: 1360px;
+  --gutter: 56px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lora', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+/* ---------- Layout ---------- */
+
+.post,
+.site-header,
+.post-list {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.post { padding-top: 64px; padding-bottom: 96px; }
+
+/* ---------- Headings ---------- */
+
+h1, h2, h3, h4 {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+h1 { font-size: 38px; line-height: 1.15; margin: 0 0 12px; }
+h2 { font-size: 24px; line-height: 1.25; margin: 48px 0 12px; }
+h3 { font-size: 19px; line-height: 1.3;  margin: 36px 0 8px; }
+
+/* ---------- Meta labels ---------- */
+
+.meta {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin: 0 0 12px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 19px;
+  margin: 0 0 32px;
+}
+
+/* ---------- Post body ---------- */
+
+.post-body p {
+  margin: 0 0 22px;
+}
+
+.post-body > p:first-of-type::first-letter {
+  font-family: 'Lora', Georgia, serif;
+  float: left;
+  font-size: 64px;
+  line-height: 0.85;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 6px 8px 0 0;
+  margin: 0;
+}
+
+.post-body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.post-body a:hover { color: var(--text); }
+
+.post-body strong { font-weight: 600; color: var(--text); }
+.post-body em { font-style: italic; }
+
+/* ---------- Code ---------- */
+
+.post-body code {
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  font-size: 0.88em;
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.post-body pre {
+  background: var(--code-bg);
+  padding: 16px 20px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 24px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.post-body pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* ---------- Blockquote ---------- */
+
+.post-body blockquote {
+  margin: 28px 0;
+  padding: 4px 0 4px 20px;
+  border-left: 3px solid var(--accent);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ---------- Locked block ---------- */
+
+.locked {
+  margin: 28px 0;
+  padding: 20px 24px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.locked-inner { display: flex; flex-direction: column; gap: 10px; }
+
+.locked-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--meta);
+  margin: 0;
+}
+
+.locked-hint {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.locked-form { display: flex; gap: 8px; }
+
+.locked-input {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+}
+.locked-input:focus { border-color: var(--accent); }
+
+.locked-button {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 8px 18px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.locked-button:hover { background: var(--text); border-color: var(--text); }
+
+.locked-error {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--error);
+  margin: 0;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.locked.shake { animation: shake 0.32s ease; }
+
+/* ---------- Post footer ---------- */
+
+.post-footer {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+.post-footer a {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--meta);
+  text-decoration: none;
+}
+.post-footer a:hover { color: var(--accent); }
+
+/* ---------- Site header (index page) ---------- */
+
+.site-header {
+  padding-top: 96px;
+  padding-bottom: 8px;
+}
+.site-title {
+  font-family: 'Lora', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 56px;
+  margin: 0 0 8px;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.site-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin: 0 0 64px;
+}
+
+/* ---------- Post list ---------- */
+
+.post-list { padding-bottom: 96px; }
+
+.post-entry {
+  padding: 28px 0;
+  border-top: 1px solid var(--rule);
+}
+.post-entry:last-child { border-bottom: 1px solid var(--rule); }
+
+.post-entry time {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--meta);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.post-entry h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  margin: 0 0 6px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.post-entry h2 a {
+  color: var(--text);
+  text-decoration: none;
+}
+.post-entry h2 a:hover { color: var(--accent); }
+
+.post-entry .summary {
+  font-family: 'Lora', serif;
+  font-size: 16px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 1000px) {
+  :root { --gutter: 24px; }
+}
+
+@media (max-width: 700px) {
+  :root { --gutter: 20px; }
+  body { font-size: 17px; }
+  h1 { font-size: 32px; }
+  .site-title { font-size: 44px; }
+  .post-body > p:first-of-type::first-letter { font-size: 54px; }
+}
+
+/* ---------- Subscribe section (index page) ---------- */
+
+.subscribe {
+  max-width: var(--content-width);
+  margin: 0 auto 96px;
+  padding: 0 var(--gutter);
+}
+
+.subscribe-heading {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  margin: 32px 0 8px;
+  color: var(--text);
+}
+
+.subscribe-blurb {
+  font-family: 'Lora', serif;
+  font-size: 16px;
+  color: var(--text-muted);
+  margin: 0 0 20px;
+}
+
+.subscribe-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.subscribe-input {
+  flex: 1;
+  min-width: 220px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  padding: 10px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+}
+.subscribe-input:focus { border-color: var(--accent); }
+
+.subscribe-button {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 10px 22px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.subscribe-button:hover { background: var(--text); border-color: var(--text); }
+
+/* Honeypot — visually hidden, accessibility-friendly */
+.subscribe-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+}
+
+.subscribe-status {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 16px 0 0;
+}
+.subscribe-status.is-error { color: var(--error); }
+
+@media (max-width: 700px) {
+  .subscribe-form { flex-direction: column; }
+  .subscribe-button { width: 100%; }
+}

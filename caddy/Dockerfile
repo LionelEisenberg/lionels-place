@@ -1,0 +1,8 @@
+# Stage 1: build Caddy with the Cloudflare DNS module
+FROM caddy:2-builder AS builder
+RUN xcaddy build \
+    --with github.com/caddy-dns/cloudflare
+
+# Stage 2: runtime image
+FROM caddy:2
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy

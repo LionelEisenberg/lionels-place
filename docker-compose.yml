@@ -1,0 +1,322 @@
+services:
+  # ==========================================
+  # MEDIA SERVER
+  # ==========================================
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    # network_mode: "bridge"
+    ports:
+      - "127.0.0.1:8096:8096"
+      - "127.0.0.1:8920:8920"
+    volumes:
+      # NOTICE: The path now includes "./jellyfin/"
+      - ./jellyfin/config:/config
+      - ./jellyfin/cache:/cache
+
+      # Your Hard Drives
+      - "L:\\Movies:/media/movies"
+      - "L:\\TV Shows:/media/tvshows"
+      - "L:\\Music:/media/music"
+    tmpfs:
+      - /config/data/transcodes
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+
+  # ==========================================
+  # MOVIE MANAGEMENT
+  # ==========================================
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      # NOTICE: The path points to the new radarr folder
+      - ./radarr/config:/config
+
+      - "L:\\Movies:/media/movies"
+      - "L:\\TV Shows:/media/tvshows"
+      - "C:\\Users\\lione\\Downloads:/downloads"
+    ports:
+      - "127.0.0.1:7878:7878"
+    restart: unless-stopped
+
+  # ==========================================
+  # TV SHOW MANAGEMENT
+  # ==========================================
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./sonarr/config:/config
+
+      - "L:\\Movies:/media/movies"
+      - "L:\\TV Shows:/media/tvshows"
+      - "C:\\Users\\lione\\Downloads:/downloads"
+    ports:
+      - "127.0.0.1:8989:8989"
+    restart: unless-stopped
+
+  # ==========================================
+  # INDEXING MANAGEMENT
+  # ==========================================
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./prowlarr/config:/config
+    ports:
+      - "127.0.0.1:9696:9696"
+    restart: unless-stopped
+
+  # ==========================================
+  # SCHEDULED SEARCH — periodic "search for missing" backstop for Sonarr
+  # RSS on busy public indexers (TPB) drops releases between syncs, so newly
+  # aired episodes can slip through. This re-searches all monitored-missing
+  # episodes every 24h via the Sonarr API. See scripts/missing-search.sh
+  # ==========================================
+  scheduled-search:
+    image: curlimages/curl:latest
+    container_name: scheduled-search
+    restart: unless-stopped
+    depends_on:
+      - sonarr
+    environment:
+      - SONARR_API_KEY=${SONARR_API_KEY}
+      - INTERVAL=21600  # 6h — backstop search cadence for episodes RSS misses
+    volumes:
+      - ./scripts/missing-search.sh:/missing-search.sh:ro
+    entrypoint: ["sh", "/missing-search.sh"]
+
+  # ==========================================
+  # REQUEST SYSTEM
+  # ==========================================
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./jellyseerr/config:/app/config
+    ports:
+      - "5055:5055"
+    restart: unless-stopped
+
+  # ==========================================
+  # PHOTO MANAGEMENT (IMMICH)
+  # ==========================================
+  immich-server:
+    image: ghcr.io/immich-app/immich-server:release
+    container_name: immich-server
+    profiles: ["immich"]
+    volumes:
+      - "L:\\Photos:/usr/src/app/upload"
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - ./immich/.env
+    # Port exposed via Caddy for HTTPS
+    depends_on:
+      - immich-redis
+      - immich-database
+    restart: unless-stopped
+
+  immich-machine-learning:
+    image: ghcr.io/immich-app/immich-machine-learning:release
+    container_name: immich-machine-learning
+    profiles: ["immich"]
+    volumes:
+      - ./immich/model-cache:/cache
+    env_file:
+      - ./immich/.env
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  immich-redis:
+    image: docker.io/redis:6.2-alpine
+    container_name: immich-redis
+    profiles: ["immich"]
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: unless-stopped
+
+  immich-database:
+    image: docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0
+    container_name: immich-database
+    profiles: ["immich"]
+    env_file:
+      - ./immich/.env
+    volumes:
+      - immich-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready --dbname='immich' --username='immich' || exit 1
+      interval: 5m
+      start_interval: 30s
+      start_period: 5m
+    command:
+      [
+        "postgres",
+        "-c", "shared_preload_libraries=vectors.so",
+        "-c", 'search_path="$$user", public, vectors',
+        "-c", "logging_collector=on",
+        "-c", "max_wal_size=2GB",
+        "-c", "shared_buffers=512MB",
+        "-c", "wal_compression=on",
+      ]
+    restart: unless-stopped
+
+  # ==========================================
+  # PASSWORD MANAGER (VAULTWARDEN)
+  # ==========================================
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    environment:
+      - TZ=America/New_York
+      - SIGNUPS_ALLOWED=false
+    volumes:
+      - ./vaultwarden/data:/data
+    restart: unless-stopped
+
+  # ==========================================
+  # REVERSE PROXY (HTTPS) — Caddy built with Cloudflare DNS plugin for DNS-01 certs
+  # ==========================================
+  caddy:
+    build: ./caddy
+    image: pirateship-caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    environment:
+      - CF_API_TOKEN=${CF_API_TOKEN}
+      - ACME_EMAIL=${ACME_EMAIL}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp" # Required for HTTP/3 (QUIC)
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+      - ./caddy/www:/srv/www
+
+  # ==========================================
+  # HELM SERVER
+  # ==========================================
+  helm:
+    build: ./helm
+    container_name: helm
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./helm/backend:/app/backend
+      - ./helm/data:/app/data
+      - ./helm/import:/app/import
+      - "L:\\Photos\\helm_photos:/app/photos"
+    command: ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+    environment:
+      - GOOGLE_HEALTH_START_DATE=${GOOGLE_HEALTH_START_DATE:-2026-06-02}
+    env_file:
+      - ./helm/.env
+
+  # ==========================================
+  # HELM HEALTH SYNC — hourly out-of-process Google Health sync trigger.
+  # In-process APScheduler doesn't fire under uvicorn --reload, so a curl
+  # sidecar pokes the secret-gated /api/health/sync-internal endpoint hourly.
+  # ==========================================
+  helm-health-sync:
+    image: curlimages/curl:latest
+    container_name: helm-health-sync
+    restart: unless-stopped
+    depends_on:
+      - helm
+    env_file:
+      - ./helm/.env
+    environment:
+      - INTERVAL=3600
+    volumes:
+      - ./scripts/health-sync.sh:/health-sync.sh:ro
+    entrypoint: ["sh", "/health-sync.sh"]
+
+  # ==========================================
+  # READ — editorial blog (read.lionel.place)
+  # ==========================================
+  read:
+    build:
+      context: ./read
+    container_name: read
+    restart: unless-stopped
+    volumes:
+      - ./read/data:/app/data
+    env_file:
+      - ./read/.env
+    # No ports exposed — Caddy reverse-proxies
+
+  # ==========================================
+  # LLM WORKER — consumes the durable llm_jobs queue (Claude by default,
+  # Gemini opt-in). Helm enqueues; this container claims, executes, and
+  # posts results back. See docs/llm_routing.md.
+  # ==========================================
+  llm-worker:
+    build: ./helm/bridge
+    image: pirateship-llm-worker
+    container_name: llm-worker
+    restart: unless-stopped
+    depends_on:
+      - helm
+    command: ["python", "worker.py"]
+    environment:
+      - HELM_INTERNAL_URL=http://helm:8001
+      - WORKER_STATE_DIR=/state
+    env_file:
+      - ./helm/.env
+    volumes:
+      - "C:\\Users\\lione\\.claude:/root/.claude"
+      - llm-worker-state:/state
+
+  # ==========================================
+  # DYNAMIC DNS — keeps Cloudflare A records pointed at home IP
+  # ==========================================
+  cloudflare-ddns:
+    image: favonia/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    restart: unless-stopped
+    network_mode: host
+    read_only: true
+    cap_drop: [all]
+    security_opt: [no-new-privileges:true]
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CF_API_TOKEN}
+      - DOMAINS=lionel.place,jellyfin.lionel.place,stream.lionel.place,pirateship.lionel.place,jellyseerr.lionel.place,requests.lionel.place,immich.lionel.place,helm.lionel.place,recipes.lionel.place,vault.lionel.place,read.lionel.place
+      - PROXIED=false
+      - IP6_PROVIDER=none
+      - UPDATE_CRON=@every 5m
+      - TZ=America/New_York
+
+volumes:
+  immich-pgdata:
+  llm-worker-state:

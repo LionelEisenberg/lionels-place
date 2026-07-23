@@ -1,0 +1,103 @@
+# ==========================================
+# GLOBAL OPTIONS
+# ==========================================
+{
+    email {env.ACME_EMAIL}
+    acme_dns cloudflare {env.CF_API_TOKEN}
+}
+
+# Access logging — JSON access logs with the REAL client IP, written to a
+# rolling file (./caddy/data/logs/access.log on host = /data/logs in the
+# container). Imported into each user-facing block below so failed-auth
+# abuse can be traced to a source IP. Jellyfin's own logs only ever show
+# the proxy/host IP (172.18.0.1), so this is the only place the true
+# client IP is recorded.
+(accesslog) {
+    log {
+        output file /data/logs/access.log {
+            roll_size 50MiB
+            roll_keep 10
+            roll_keep_for 2160h
+        }
+        format json
+    }
+}
+
+
+# =====================================================================
+# NEW LAYOUT — subdomains on lionel.place
+# =====================================================================
+
+# Apex: serve the luxury landing page at lionel.place.
+# All paths rewrite to /landing.html (file_server serves it from /srv/www).
+lionel.place {
+    encode gzip
+    import accesslog
+    root * /srv/www
+    rewrite * /landing.html
+    file_server
+}
+
+# Resume — static single page (orange-cloud), served from /srv/www.
+resume.lionel.place {
+    encode gzip
+    import accesslog
+    root * /srv/www
+    rewrite * /resume.html
+    file_server
+}
+
+# Jellyseerr (+ alias: requests)
+jellyseerr.lionel.place, requests.lionel.place {
+    encode gzip
+    import accesslog
+    reverse_proxy jellyseerr:5055
+}
+
+# Jellyfin (grey-cloud; direct streaming bandwidth) + aliases: stream, pirateship
+jellyfin.lionel.place, stream.lionel.place, pirateship.lionel.place {
+    encode gzip
+    import accesslog
+    reverse_proxy jellyfin:8096 {
+        header_up X-Real-IP {remote_host}
+    }
+}
+
+# Immich (grey-cloud; large uploads)
+immich.lionel.place {
+    encode gzip
+    import accesslog
+    reverse_proxy immich-server:2283
+}
+
+# Vaultwarden (orange-cloud; needs real client IP for rate limiting)
+vault.lionel.place {
+    encode gzip
+    import accesslog
+    reverse_proxy vaultwarden:80 {
+        header_up X-Real-IP {remote_host}
+    }
+}
+
+# Helm (orange-cloud) — served at root, no /helm path prefix.
+helm.lionel.place {
+    encode gzip
+    import accesslog
+    reverse_proxy helm:8001
+}
+
+# Public recipes — dedicated subdomain. Proxies to Helm backend; the
+# frontend's main.tsx detects hostname=recipes.lionel.place and renders
+# the read-only RecipeBank at the root path.
+recipes.lionel.place {
+    encode gzip
+    import accesslog
+    reverse_proxy helm:8001
+}
+
+# Read — editorial blog (orange-cloud)
+read.lionel.place {
+    encode gzip
+    import accesslog
+    reverse_proxy read:80
+}

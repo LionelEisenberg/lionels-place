@@ -1,0 +1,16 @@
+{
+  "category": "General",
+  "changelog": "- Add search, drag-reorder, import/export, and unsaved-changes guard to config page",
+  "description": "Inject custom javascript(s) to the Jellyfin Web UI",
+  "guid": "f5a34f7b-2e8a-4e6a-a722-3a216a81b374",
+  "name": "JavaScript Injector",
+  "overview": "Inject custom javascript(s) to the Jellyfin Web UI",
+  "owner": "n00bcodr",
+  "targetAbi": "10.11.0.0",
+  "timestamp": "2026-07-19T18:31:45.0000000Z",
+  "version": "3.5.0.0",
+  "status": "Active",
+  "autoUpdate": true,
+  "imagePath": "/config/plugins/JavaScript Injector_3.5.0.0/icon.png",
+  "assemblies": []
+}
